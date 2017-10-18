@@ -1,136 +1,105 @@
-# Sample solution for Assignment 8 - Tic Tac Toe Game
-
-
-# The drawboard function is relatively straight forward. The only catch is the nested loop, and the way each row is printed in the same line.
+# Solution for Assignment 8 - Tic Tac Toe Game
+# By Megan Haber
 
 def drawboard(board):
-	for row in board:
-		for col in row:
-			print(col, end = " ")
-		print()
-
-
-# The only thing to take care of in the getcell function is checking whether r and c are outside of 0 and 2 BEFORE checking board[r][c] != '-'
+    for row in board:
+        for col in row:
+            print(col,end=" ")
+        print()
 
 def getcell(board):
-	r = int(input("Enter row: "))
-	c = int(input("Enter col: "))
-	while (r < 0 or r > 2) or (c < 0 or c > 2) or (board[r][c] != '-'):
-		r = int(input("Enter row again: "))
-		c = int(input("Enter col again: "))
+    row = int(input('Enter row.'))
+    col = int(input('Enter column.'))
+    while ((row>2 or row<0 or col>2 or col<0)or(board[row][col]=='O' or board[row][col]=='X')):
+        row = int(input('Enter row.'))
+        col = int(input('Enter column.'))
+    return row, col
 
-	return r,c
-
-
-# The updateboard function really has no explanation required. symbol is the symbol to be inserted, row, and column are given... so yeah.
-
-def updateboard(row, column, symbol, board):
-	board[row][column] = symbol
-	return board
-
-
-# There are a ton of ways to implement checkwin. Even if you have done it by checking each possible row and column for' X' and 'O', that's fine.
-# As long as you have taken care of every victory condition, you will get full credit for this.
-# This is the shortest way I could come up with.
-# Again, even in my way, you could change things around, as long as it logically makes sense.
+def updateboard(row,col,symbol,board):
+    if symbol==1:
+        board[row][col]='X'
+        return board
+    if symbol==2:
+        board[row][col]='O'
+        return board
 
 def checkwin(board):
+    #checks if move was on vertical line and causes win
+    if board[0][0]=='X' and board[1][0]=='X'and board[2][0]=='X':
+        return True
+    elif board[0][0]=='O' and board[1][0]=='O' and board[2][0]=='O':
+        return True
+    elif board[0][1]=='X' and board[1][1]=='X' and board[2][1]=='X':
+        return True
+    elif board[0][1]=='O' and board[1][1]=='O' and board[2][1]=='O':
+        return True
+    elif board[0][2]=='X' and board[1][2]=='X' and board[2][2]=='X':
+        return True
+    elif board[0][2]=='X' and board[1][2]=='X' and board[2][2]=='X':
+        return True
+    #checks if move was on horizontal line and causes win
+    elif board[0][0]=='X' and board[0][1]=='X' and board[0][2]=='X':
+        return True
+    elif board[0][0]=='O' and board[0][1]=='O' and board[0][2]=='O':
+        return True
+    elif board[1][0]=='X' and board[1][1]=='X' and board[1][2]=='X':
+        return True
+    elif board[1][0]=='O' and board[1][1]=='O' and board[1][2]=='O':
+        return True
+    elif board[2][0]=='X' and board[2][1]=='X' and board[2][2]=='X':
+        return True
+    elif board[2][0]=='O' and board[2][1]=='O' and board[2][2]=='O':
+        return True
+    #checks if move was on first diagonal and causes win
+    elif board[0][0]=='X' and board[1][1]=='X' and board[2][2]=='X':
+        return True
+    elif board[0][0]=='O' and board[1][1]=='O' and board[2][2]=='O':
+        return True
+    #checks if move was on second diagonal and causes win
+    elif board[0][2]=='X' and board[1][1]=='X' and board[2][0]=='X':
+        return True
+    elif board[0][2]=='O' and board[1][1]=='O' and board[2][0]=='O':
+        return True
+    return False
 
-	# First we check if any row has victory condition
-	# Notice the use of list.count() to simplify the condition
-	for row in board:
-		if row.count('X') == 3 or row.count('O') == 3:
-			return True
-
-
-	# We now check if any column meets the victory condition
-	# Notice, the outer for loop goes through the columns (as opposed to drawboard)
-	# For each column, we accumulate the contents into a string
-	# Then our check condition simply becomes checking if the string is "XXX" or "OOO"
-	# Also notice how we reset the test string after all the rows, before starting the next column
-	columnTest = ""
-	for col in range(3):
-		for row in range(3):
-			columnTest += board[row][col]
-		if columnTest == "XXX" or columnTest == "OOO":
-			return True
-		columnTest = ""
-
-
-	# Finally we check the diagonals.
-	# Again we make 2 strings of the diagonals and check those strings to simplify our conditions.
-	diagonal1 = board[0][0] + board[1][1] + board[2][2]
-	diagonal2 = board[0][2] + board[1][1] + board[2][0]
-
-	if diagonal1 == "XXX" or diagonal1 == "OOO" or diagonal2 == "XXX" or diagonal2 == "OOO":
-		return True
-
-
-	# If we have reached this point, none of the victory conditions were satisfied, so there is no win yet
-	return False
-
-
-
-# The function checktie, is again, not complicated
-# Go through each row, and see if an empty cell ('-') exists in any row
 def checktie(board):
-	for row in board:
-		if '-' in row:
-			return False
-
-	return True
-
-
-
-# The startgame function is the function that runs the actual game and uses the other functions
+    if '-' not in board[0] and '-' not in board[1] and '-' not in board[2]:
+        return True
+    else:
+        False
+        
 def startgame():
-	
-	# Take player names as input
-	p1 = input("Enter Player 1 Name: ")
-	p2 = input("Enter Player 2 Name: ")
-	
-	# Create the empty board
-	myboard = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+    print('Tic Tac Toe')
+    p1 = str(input('Welcome Player X!  Please enter your name.'))
+    p2 = str(input('Welcome Player O!  Please enter your name.'))
+    myboard = [['-','-','-'],['-','-','-'],['-','-','-']]
+    drawboard(myboard)
+    while True:
+        print(p1 + "'s turn.")
+        cell = getcell(myboard)
+        turn = 1
+        updateboard(cell[0],cell[1],turn,myboard)
+        checkwin(myboard)
+        checktie(myboard)
+        drawboard(myboard)
+        if checkwin(myboard)==True and turn==1:
+            print('Congratulations, ' + p1 + ', you win!')
+            break
+        if checktie(myboard)==True:
+            print("It's a tie!")
+            break
+        print(p2 + "'s turn.")
+        cell = getcell(myboard)
+        turn = 2
+        updateboard(cell[0],cell[1],turn,myboard)
+        checkwin(myboard)
+        checktie(myboard)
+        drawboard(myboard)
+        if checkwin(myboard)==True and turn==2:
+            print('Congratulations, ' + p2 + ', you win!')
+            break
+        if checktie(myboard)==True:
+            print("It's a tie!")
+            break
 
-	# Initialize the turn variable to keep track of turn
-	turn = 1
-
-	# Start the main loop as long as there is no victory and no tie
-		# Get a cell from the player
-		# Call update board board based on the turn
-		# Flip turn
-		# Draw the board
-	while (not checkwin(myboard)) and (not checktie(myboard)):
-
-		row, col = getcell(myboard)
-
-		if turn == 1:
-			myboard = updateboard(row, col, "O", myboard)
-			turn = 2
-		else:
-			myboard = updateboard(row, col, "X", myboard)
-			turn = 1
-
-		drawboard(myboard)
-
-
-	# If we reach here, the loop has ended
-	# This means either victory or tie
-	# In any case, game over.
-	print("Game Over")
-
-
-# We must call startgame from the main program to start it off
-# Notice, no printing or storing in variables
-# Simple function call
-startgame()
-
-
-
-
-
-
-
-
-
-
+print(startgame())
